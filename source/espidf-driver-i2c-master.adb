@@ -33,7 +33,43 @@ package body ESPIDF.Driver.I2C.Master is
    ----------------
 
    procedure Initialize
-     (Self                   : out i2c_master_bus_config_t;
+     (Configuration     : out i2c_device_config_t;
+      dev_addr_length   : i2c_addr_bit_len_t;
+      device_address    : Interfaces.Unsigned_16;
+      scl_speed_hz      : Interfaces.Unsigned_32;
+      scl_wait          : Duration := 0.0;
+      disable_ack_check : Boolean := False)
+   is
+      procedure Internal
+        (Configuration     : out i2c_device_config_t;
+         dev_addr_length   : i2c_addr_bit_len_t;
+         device_address    : Interfaces.Unsigned_16;
+         scl_speed_hz      : Interfaces.Unsigned_32;
+         scl_wait_us       : Interfaces.Unsigned_32;
+         disable_ack_check : Interfaces.C.C_bool)
+         with Import,
+              Convention => C,
+              External_Name => "__ada_i2c_device_config_t__initialize";
+
+      Scl_Wait_Us : constant Interfaces.Unsigned_32 :=
+        Interfaces.Unsigned_32 (scl_wait * 1_000_000);
+
+   begin
+      Internal
+        (Configuration     => Configuration,
+         dev_addr_length   => dev_addr_length,
+         device_address    => device_address,
+         scl_speed_hz      => scl_speed_hz,
+         scl_wait_us       => Scl_Wait_Us,
+         disable_ack_check => Interfaces.C.C_bool (disable_ack_check));
+   end Initialize;
+
+   ----------------
+   -- Initialize --
+   ----------------
+
+   procedure Initialize
+     (Configuration          : out i2c_master_bus_config_t;
       i2c_port               : i2c_port_num_t        := -1;
       sda_io_num             : gpio_num_t;
       scl_io_num             : gpio_num_t;
@@ -45,7 +81,7 @@ package body ESPIDF.Driver.I2C.Master is
       allow_pd               : Boolean               := False)
    is
       procedure Internal
-        (Self                   : out i2c_master_bus_config_t;
+        (Configuration          : out i2c_master_bus_config_t;
          i2c_port               : i2c_port_num_t;
          sda_io_num             : gpio_num_t;
          scl_io_num             : gpio_num_t;
@@ -60,7 +96,7 @@ package body ESPIDF.Driver.I2C.Master is
               External_Name => "__ada_i2c_master_bus_config_t__initialize";
    begin
       Internal
-        (Self                   => Self,
+        (Configuration          => Configuration,
          i2c_port               => i2c_port,
          sda_io_num             => sda_io_num,
          scl_io_num             => scl_io_num,

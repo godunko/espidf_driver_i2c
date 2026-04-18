@@ -12,10 +12,12 @@ package ESPIDF.Driver.I2C.Master is
 
    type i2c_master_bus_config_t is private;
 
+   type i2c_device_config_t is private;
+
    type i2c_master_bus_handle_t is private;
 
    procedure Initialize
-     (Self                   : out i2c_master_bus_config_t;
+     (Configuration          : out i2c_master_bus_config_t;
       i2c_port               : i2c_port_num_t        := -1;
       sda_io_num             : gpio_num_t;
       scl_io_num             : gpio_num_t;
@@ -25,6 +27,14 @@ package ESPIDF.Driver.I2C.Master is
       trans_queue_depth      : Interfaces.C.size_t   := 0;
       enable_internal_pullup : Boolean               := False;
       allow_pd               : Boolean               := False);
+
+   procedure Initialize
+     (Configuration     : out i2c_device_config_t;
+      dev_addr_length   : i2c_addr_bit_len_t;
+      device_address    : Interfaces.Unsigned_16;
+      scl_speed_hz      : Interfaces.Unsigned_32;
+      scl_wait          : Duration := 0.0;
+      disable_ack_check : Boolean := False);
 
    function i2c_new_master_bus
      (bus_config     : i2c_master_bus_config_t;
@@ -42,6 +52,8 @@ private
 
    sizeof_i2c_master_bus_config_t : constant Interfaces.C.int
       with Import, Link_Name => "__ada_sizeof_i2c_master_bus_config_t";
+   sizeof_i2c_device_config_t     : constant Interfaces.C.int
+      with Import, Link_Name => "__ada_sizeof_i2c_device_config_t";
 
    type i2c_master_bus_config_t_Storage is
      new System.Storage_Elements.Storage_Array
@@ -50,6 +62,12 @@ private
 
    type i2c_master_bus_config_t is record
       Storage : i2c_master_bus_config_t_Storage := [others => 0];
+   end record with Convention => C;
+
+   type i2c_device_config_t is record
+      Storage : System.Storage_Elements.Storage_Array
+                  (1 .. System.Storage_Elements.Storage_Count
+                          (sizeof_i2c_device_config_t)) := [others => 0];
    end record with Convention => C;
 
    type i2c_master_bus_t is null record with Convention => C;
