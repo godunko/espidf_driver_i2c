@@ -6,6 +6,28 @@
 
 package body ESPIDF.Driver.I2C.Master is
 
+   ----------------------
+   -- i2c_master_probe --
+   ----------------------
+
+   function i2c_master_probe
+     (bus_handle   : i2c_master_bus_handle_t;
+      address      : Interfaces.Unsigned_16;
+      xfer_timeout : Duration) return esp_err_t
+   is
+      function Internal
+        (bus_handle       : i2c_master_bus_handle_t;
+         address          : Interfaces.Unsigned_16;
+         xfer_timeout_ms  : Interfaces.C.int) return esp_err_t
+         with Import, Convention => C, Link_Name => "i2c_master_probe";
+
+      Xfer_Timeout_Ms : constant Interfaces.C.int :=
+        Interfaces.C.int (xfer_timeout * 1_000);
+
+   begin
+      return Internal (bus_handle, address, Xfer_Timeout_Ms);
+   end i2c_master_probe;
+
    ----------------
    -- Initialize --
    ----------------
