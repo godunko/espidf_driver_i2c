@@ -6,4 +6,17 @@
 
 package ESPIDF.Driver.I2C with Pure is
 
+   type i2c_port_num_t is new Interfaces.C.int;
+
+   type soc_periph_i2c_clk_src_t is new Interfaces.C.int;
+   I2C_CLK_SRC_XTAL    : constant soc_periph_i2c_clk_src_t
+     with Import, Convention => C, External_Name => "__enum_I2C_CLK_SRC_XTAL";
+   I2C_CLK_SRC_RC_FAST : constant soc_periph_i2c_clk_src_t
+     with Import, Convention => C, External_Name => "__enum_I2C_CLK_SRC_RC_FAST";
+   I2C_CLK_SRC_DEFAULT : constant soc_periph_i2c_clk_src_t
+     with Import, Convention => C, External_Name => "__enum_I2C_CLK_SRC_DEFAULT";
+   --  XXX Move to Clock driver
+
+   subtype i2c_clock_source_t is soc_periph_i2c_clk_src_t;
+
 end ESPIDF.Driver.I2C;
