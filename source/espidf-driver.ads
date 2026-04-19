@@ -6,7 +6,7 @@
 
 package ESPIDF.Driver with Pure is
 
-   type gpio_num_t is new Interfaces.C.int;
+   type gpio_num_t is new int;
    --  XXX Move to GPIO driver
 
 end ESPIDF.Driver;

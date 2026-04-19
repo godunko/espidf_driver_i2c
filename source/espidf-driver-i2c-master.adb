@@ -31,17 +31,16 @@ package body ESPIDF.Driver.I2C.Master is
 
    function i2c_master_probe
      (bus_handle   : i2c_master_bus_handle_t;
-      address      : Interfaces.Unsigned_16;
+      address      : uint16_t;
       xfer_timeout : Duration) return esp_err_t
    is
       function Internal
         (bus_handle       : i2c_master_bus_handle_t;
-         address          : Interfaces.Unsigned_16;
-         xfer_timeout_ms  : Interfaces.C.int) return esp_err_t
+         address          : uint16_t;
+         xfer_timeout_ms  : int) return esp_err_t
          with Import, Convention => C, Link_Name => "i2c_master_probe";
 
-      Xfer_Timeout_Ms : constant Interfaces.C.int :=
-        Interfaces.C.int (xfer_timeout * 1_000);
+      Xfer_Timeout_Ms : constant int := int (xfer_timeout * 1_000);
 
    begin
       return Internal (bus_handle, address, Xfer_Timeout_Ms);
@@ -54,24 +53,23 @@ package body ESPIDF.Driver.I2C.Master is
    procedure Initialize
      (Configuration     : out i2c_device_config_t;
       dev_addr_length   : i2c_addr_bit_len_t;
-      device_address    : Interfaces.Unsigned_16;
-      scl_speed_hz      : Interfaces.Unsigned_32;
+      device_address    : uint16_t;
+      scl_speed_hz      : uint32_t;
       scl_wait          : Duration := 0.0;
       disable_ack_check : Boolean := False)
    is
       procedure Internal
         (Configuration     : out i2c_device_config_t;
          dev_addr_length   : i2c_addr_bit_len_t;
-         device_address    : Interfaces.Unsigned_16;
-         scl_speed_hz      : Interfaces.Unsigned_32;
-         scl_wait_us       : Interfaces.Unsigned_32;
-         disable_ack_check : Interfaces.C.C_bool)
+         device_address    : uint16_t;
+         scl_speed_hz      : uint32_t;
+         scl_wait_us       : uint32_t;
+         disable_ack_check : bool)
          with Import,
               Convention => C,
               External_Name => "__ada_i2c_device_config_t__initialize";
 
-      Scl_Wait_Us : constant Interfaces.Unsigned_32 :=
-        Interfaces.Unsigned_32 (scl_wait * 1_000_000);
+      Scl_Wait_Us : constant uint32_t := uint32_t (scl_wait * 1_000_000);
 
    begin
       Internal
@@ -80,7 +78,7 @@ package body ESPIDF.Driver.I2C.Master is
          device_address    => device_address,
          scl_speed_hz      => scl_speed_hz,
          scl_wait_us       => Scl_Wait_Us,
-         disable_ack_check => Interfaces.C.C_bool (disable_ack_check));
+         disable_ack_check => bool (disable_ack_check));
    end Initialize;
 
    ----------------
@@ -89,15 +87,15 @@ package body ESPIDF.Driver.I2C.Master is
 
    procedure Initialize
      (Configuration          : out i2c_master_bus_config_t;
-      i2c_port               : i2c_port_num_t        := -1;
+      i2c_port               : i2c_port_num_t     := -1;
       sda_io_num             : gpio_num_t;
       scl_io_num             : gpio_num_t;
-      clk_source             : i2c_clock_source_t    := I2C_CLK_SRC_DEFAULT;
-      glitch_ignore_cnt      : Interfaces.Unsigned_8 := 7;
-      intr_priority          : Interfaces.C.int      := 0;
-      trans_queue_depth      : Interfaces.C.size_t   := 0;
-      enable_internal_pullup : Boolean               := False;
-      allow_pd               : Boolean               := False)
+      clk_source             : i2c_clock_source_t := I2C_CLK_SRC_DEFAULT;
+      glitch_ignore_cnt      : uint8_t            := 7;
+      intr_priority          : int                := 0;
+      trans_queue_depth      : size_t             := 0;
+      enable_internal_pullup : Boolean            := False;
+      allow_pd               : Boolean            := False)
    is
       procedure Internal
         (Configuration          : out i2c_master_bus_config_t;
@@ -105,11 +103,11 @@ package body ESPIDF.Driver.I2C.Master is
          sda_io_num             : gpio_num_t;
          scl_io_num             : gpio_num_t;
          clk_source             : i2c_clock_source_t;
-         glitch_ignore_cnt      : Interfaces.Unsigned_8;
-         intr_priority          : Interfaces.C.int;
-         trans_queue_depth      : Interfaces.C.size_t;
-         enable_internal_pullup : Interfaces.C.C_bool;
-         allow_pd               : Interfaces.C.C_bool)
+         glitch_ignore_cnt      : uint8_t;
+         intr_priority          : int;
+         trans_queue_depth      : size_t;
+         enable_internal_pullup : bool;
+         allow_pd               : bool)
          with Import,
               Convention => C,
               External_Name => "__ada_i2c_master_bus_config_t__initialize";
@@ -123,8 +121,8 @@ package body ESPIDF.Driver.I2C.Master is
          glitch_ignore_cnt      => glitch_ignore_cnt,
          intr_priority          => intr_priority,
          trans_queue_depth      => trans_queue_depth,
-         enable_internal_pullup => Interfaces.C.C_bool (enable_internal_pullup),
-         allow_pd               => Interfaces.C.C_bool (allow_pd));
+         enable_internal_pullup => bool (enable_internal_pullup),
+         allow_pd               => bool (allow_pd));
    end Initialize;
 
 end ESPIDF.Driver.I2C.Master;

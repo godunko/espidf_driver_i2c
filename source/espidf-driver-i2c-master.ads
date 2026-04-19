@@ -20,23 +20,23 @@ package ESPIDF.Driver.I2C.Master is
 
    procedure Initialize
      (Configuration          : out i2c_master_bus_config_t;
-      i2c_port               : i2c_port_num_t        := -1;
+      i2c_port               : i2c_port_num_t     := -1;
       sda_io_num             : gpio_num_t;
       scl_io_num             : gpio_num_t;
-      clk_source             : i2c_clock_source_t    := I2C_CLK_SRC_DEFAULT;
-      glitch_ignore_cnt      : Interfaces.Unsigned_8 := 7;
-      intr_priority          : Interfaces.C.int      := 0;
-      trans_queue_depth      : Interfaces.C.size_t   := 0;
-      enable_internal_pullup : Boolean               := False;
-      allow_pd               : Boolean               := False);
+      clk_source             : i2c_clock_source_t := I2C_CLK_SRC_DEFAULT;
+      glitch_ignore_cnt      : uint8_t            := 7;
+      intr_priority          : int                := 0;
+      trans_queue_depth      : size_t             := 0;
+      enable_internal_pullup : Boolean            := False;
+      allow_pd               : Boolean            := False);
 
    procedure Initialize
      (Configuration     : out i2c_device_config_t;
       dev_addr_length   : i2c_addr_bit_len_t;
-      device_address    : Interfaces.Unsigned_16;
-      scl_speed_hz      : Interfaces.Unsigned_32;
+      device_address    : uint16_t;
+      scl_speed_hz      : uint32_t;
       scl_wait          : Duration := 0.0;
-      disable_ack_check : Boolean := False);
+      disable_ack_check : Boolean  := False);
 
    function i2c_new_master_bus
      (bus_config     : i2c_master_bus_config_t;
@@ -54,16 +54,14 @@ package ESPIDF.Driver.I2C.Master is
 
    function i2c_master_probe
      (bus_handle   : i2c_master_bus_handle_t;
-      address      : Interfaces.Unsigned_16;
+      address      : uint16_t;
       xfer_timeout : Duration) return esp_err_t;
 
 private
 
-   use type Interfaces.C.int;
-
-   sizeof_i2c_master_bus_config_t : constant Interfaces.C.int
+   sizeof_i2c_master_bus_config_t : constant int
       with Import, Link_Name => "__ada_sizeof_i2c_master_bus_config_t";
-   sizeof_i2c_device_config_t     : constant Interfaces.C.int
+   sizeof_i2c_device_config_t     : constant int
       with Import, Link_Name => "__ada_sizeof_i2c_device_config_t";
 
    type i2c_master_bus_config_t_Storage is
