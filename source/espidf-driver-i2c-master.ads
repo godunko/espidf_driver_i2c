@@ -52,6 +52,9 @@ package ESPIDF.Driver.I2C.Master is
    function i2c_del_master_bus
      (bus_handle : in out i2c_master_bus_handle_t) return esp_err_t;
 
+   function i2c_master_bus_rm_device
+     (dev_handle : in out i2c_master_dev_handle_t) return esp_err_t;
+
    function i2c_master_probe
      (bus_handle   : i2c_master_bus_handle_t;
       address      : uint16_t;
