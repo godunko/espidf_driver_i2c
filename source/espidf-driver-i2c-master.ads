@@ -49,6 +49,9 @@ package ESPIDF.Driver.I2C.Master is
       ret_handle   : out i2c_master_dev_handle_t) return esp_err_t
       with Import, Convention => C, Link_Name => "i2c_master_bus_add_device";
 
+   function i2c_del_master_bus
+     (bus_handle : in out i2c_master_bus_handle_t) return esp_err_t;
+
    function i2c_master_probe
      (bus_handle   : i2c_master_bus_handle_t;
       address      : Interfaces.Unsigned_16;

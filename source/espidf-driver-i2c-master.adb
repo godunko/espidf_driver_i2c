@@ -6,6 +6,25 @@
 
 package body ESPIDF.Driver.I2C.Master is
 
+   ------------------------
+   -- i2c_del_master_bus --
+   ------------------------
+
+   function i2c_del_master_bus
+     (bus_handle : in out i2c_master_bus_handle_t) return esp_err_t
+   is
+      function Internal
+        (bus_handle : i2c_master_bus_handle_t) return esp_err_t
+         with Import, Convention => C, Link_Name => "i2c_del_master_bus";
+
+   begin
+      return Result : constant esp_err_t := Internal (bus_handle) do
+         if Result = ESP_OK then
+            bus_handle := null;
+         end if;
+      end return;
+   end i2c_del_master_bus;
+
    ----------------------
    -- i2c_master_probe --
    ----------------------
