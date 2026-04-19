@@ -6,6 +6,10 @@
 
 package body ESPIDF.Driver.I2C.Master is
 
+   function To_MS (Value : Duration) return int;
+   --  Converts a Duration to milliseconds, returning -1 if the Duration is
+   --  infinite.
+
    ------------------------
    -- i2c_del_master_bus --
    ------------------------
@@ -51,7 +55,7 @@ package body ESPIDF.Driver.I2C.Master is
    function i2c_master_probe
      (bus_handle   : i2c_master_bus_handle_t;
       address      : uint16_t;
-      xfer_timeout : Duration) return esp_err_t
+      xfer_timeout : Duration := Duration'Last) return esp_err_t
    is
       function Internal
         (bus_handle       : i2c_master_bus_handle_t;
@@ -59,11 +63,51 @@ package body ESPIDF.Driver.I2C.Master is
          xfer_timeout_ms  : int) return esp_err_t
          with Import, Convention => C, Link_Name => "i2c_master_probe";
 
-      Xfer_Timeout_Ms : constant int := int (xfer_timeout * 1_000);
+      Xfer_Timeout_Ms : constant int := To_MS (xfer_timeout);
 
    begin
       return Internal (bus_handle, address, Xfer_Timeout_Ms);
    end i2c_master_probe;
+
+   -------------------------
+   -- i2c_master_transmit --
+   -------------------------
+
+   function i2c_master_transmit
+     (i2c_dev        : i2c_master_dev_handle_t;
+      write_buffer   : System.Address;
+      write_size     : size_t;
+      xfer_timeout   : Duration := Duration'Last) return esp_err_t
+   is
+      function Internal
+        (i2c_dev         : i2c_master_dev_handle_t;
+         write_buffer    : System.Address;
+         write_size      : size_t;
+         xfer_timeout_ms : int) return esp_err_t
+         with Import, Convention => C, Link_Name => "i2c_master_transmit";
+
+      Xfer_Timeout_Ms : constant int := To_MS (xfer_timeout);
+
+   begin
+      return Internal (i2c_dev, write_buffer, write_size, Xfer_Timeout_Ms);
+   end i2c_master_transmit;
+
+   -------------------------
+   -- i2c_master_transmit --
+   -------------------------
+
+   function i2c_master_transmit
+     (i2c_dev      : i2c_master_dev_handle_t;
+      write_buffer : A0B.Types.Arrays.Unsigned_8_Array;
+      xfer_timeout : Duration := Duration'Last) return esp_err_t is
+   begin
+      return
+        i2c_master_transmit
+          (i2c_dev      => i2c_dev,
+           write_buffer => write_buffer'Address,
+           write_size   => write_buffer'Length,
+           xfer_timeout => xfer_timeout);
+   end i2c_master_transmit;
 
    ----------------
    -- Initialize --
@@ -143,5 +187,21 @@ package body ESPIDF.Driver.I2C.Master is
          enable_internal_pullup => bool (enable_internal_pullup),
          allow_pd               => bool (allow_pd));
    end Initialize;
+
+   -----------
+   -- To_MS --
+   -----------
+
+   function To_MS (Value : Duration) return int is
+      use type int;
+
+   begin
+      if Value = Duration'Last then
+         return -1;
+
+      else
+         return int (Value * 1_000);
+      end if;
+   end To_MS;
 
 end ESPIDF.Driver.I2C.Master;
