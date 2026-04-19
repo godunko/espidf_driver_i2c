@@ -74,10 +74,10 @@ package body ESPIDF.Driver.I2C.Master is
    -------------------------
 
    function i2c_master_transmit
-     (i2c_dev        : i2c_master_dev_handle_t;
-      write_buffer   : System.Address;
-      write_size     : size_t;
-      xfer_timeout   : Duration := Duration'Last) return esp_err_t
+     (i2c_dev      : i2c_master_dev_handle_t;
+      write_buffer : System.Address;
+      write_size   : size_t;
+      xfer_timeout : Duration := Duration'Last) return esp_err_t
    is
       function Internal
         (i2c_dev         : i2c_master_dev_handle_t;
