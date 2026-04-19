@@ -1,5 +1,5 @@
 name = "espidf_driver_i2c"
-description = "Ada/ESP-IDF I2C master/slave driver binding"
+description = "Ada/ESP-IDF I2C master/slave driver"
 version = "0.1.0-dev"
 
 authors = ["Vadim Godunko"]
@@ -14,4 +14,4 @@ generate_c = false
 generate_gpr = true
 
 [[depends-on]]
-a0b_base = "*"
+espidf = "*"
