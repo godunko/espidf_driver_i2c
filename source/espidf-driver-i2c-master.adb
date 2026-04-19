@@ -69,6 +69,46 @@ package body ESPIDF.Driver.I2C.Master is
       return Internal (bus_handle, address, Xfer_Timeout_Ms);
    end i2c_master_probe;
 
+   ------------------------
+   -- i2c_master_receive --
+   ------------------------
+
+   function i2c_master_receive
+     (i2c_dev      : i2c_master_dev_handle_t;
+      read_buffer  : System.Address;
+      read_size    : size_t;
+      xfer_timeout : Duration := Duration'Last) return esp_err_t
+   is
+      function Internal
+        (i2c_dev         : i2c_master_dev_handle_t;
+         read_buffer     : System.Address;
+         read_size       : size_t;
+         xfer_timeout_ms : int) return esp_err_t
+         with Import, Convention => C, Link_Name => "i2c_master_receive";
+
+      Xfer_Timeout_Ms : constant int := To_MS (xfer_timeout);
+
+   begin
+      return Internal (i2c_dev, read_buffer, read_size, Xfer_Timeout_Ms);
+   end i2c_master_receive;
+
+   ------------------------
+   -- i2c_master_receive --
+   ------------------------
+
+   function i2c_master_receive
+     (i2c_dev      : i2c_master_dev_handle_t;
+      read_buffer  : out A0B.Types.Arrays.Unsigned_8_Array;
+      xfer_timeout : Duration := Duration'Last) return esp_err_t is
+   begin
+      return
+        i2c_master_receive
+          (i2c_dev      => i2c_dev,
+           read_buffer  => read_buffer'Address,
+           read_size    => read_buffer'Length,
+           xfer_timeout => xfer_timeout);
+   end i2c_master_receive;
+
    -------------------------
    -- i2c_master_transmit --
    -------------------------

@@ -69,6 +69,17 @@ package ESPIDF.Driver.I2C.Master is
       write_buffer : A0B.Types.Arrays.Unsigned_8_Array;
       xfer_timeout : Duration := Duration'Last) return esp_err_t;
 
+   function i2c_master_receive
+     (i2c_dev      : i2c_master_dev_handle_t;
+      read_buffer  : System.Address;
+      read_size    : size_t;
+      xfer_timeout : Duration := Duration'Last) return esp_err_t;
+
+   function i2c_master_receive
+     (i2c_dev      : i2c_master_dev_handle_t;
+      read_buffer  : out A0B.Types.Arrays.Unsigned_8_Array;
+      xfer_timeout : Duration := Duration'Last) return esp_err_t;
+
    function i2c_master_probe
      (bus_handle   : i2c_master_bus_handle_t;
       address      : uint16_t;
