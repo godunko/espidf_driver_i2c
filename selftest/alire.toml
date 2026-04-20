@@ -1,0 +1,20 @@
+name = "espidf_driver_i2c_selftest"
+version = "0.1.0-dev"
+description = "Ada/ESP-IDF I2C master/slave driver Selftest"
+
+authors = ["Vadim Godunko"]
+maintainers = ["Vadim Godunko <vgodunko@gmail.com>"]
+maintainers-logins = ["godunko"]
+licenses = "Apache-2.0 WITH LLVM-exception"
+tags = ["embedded", "esp32", "espidf", "driver", "i2c"]
+
+[configuration]
+generate_ada = false
+generate_c = false
+generate_gpr = false
+
+[[depends-on]]
+espidf_driver_i2c = "*"
+
+[[pins]]
+espidf_driver_i2c = { path='..' }

@@ -19,3 +19,8 @@ generate_gpr = true
 
 [[depends-on]]
 espidf = "*"
+
+[[actions]]
+type = "test"
+directory = "selftest"
+command = ["alr", "build"]

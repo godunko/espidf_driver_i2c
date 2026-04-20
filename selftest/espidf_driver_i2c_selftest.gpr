@@ -1,0 +1,11 @@
+--
+--  Copyright (C) 2026, Vadim Godunko <vgodunko@gmail.com>
+--
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+--
+
+--  Crate can't be built without ESP-IDF environment
+
+abstract project ESPIDF_Driver_I2C_Selftest is
+
+end ESPIDF_Driver_I2C_Selftest;
