@@ -149,6 +149,34 @@ package body ESPIDF.Driver.I2C.Master is
            xfer_timeout => xfer_timeout);
    end i2c_master_transmit;
 
+   --------------------------------------
+   -- i2c_master_multi_buffer_transmit --
+   --------------------------------------
+
+   function i2c_master_multi_buffer_transmit
+     (i2c_dev           : i2c_master_dev_handle_t;
+      buffer_info_array : i2c_master_transmit_multi_buffer_info_t_Array;
+      xfer_timeout      : Duration := Duration'Last) return esp_err_t
+   is
+      function Internal
+        (i2c_dev           : i2c_master_dev_handle_t;
+         buffer_info_array : System.Address;
+         array_size        : size_t;
+         xfer_timeout_ms   : int) return esp_err_t
+         with Import,
+              Convention => C,
+              Link_Name => "i2c_master_multi_buffer_transmit";
+
+      Xfer_Timeout_Ms : constant int := To_MS (xfer_timeout);
+
+   begin
+      return Internal
+        (i2c_dev           => i2c_dev,
+         buffer_info_array => buffer_info_array'Address,
+         array_size        => buffer_info_array'Length,
+         xfer_timeout_ms   => Xfer_Timeout_Ms);
+   end i2c_master_multi_buffer_transmit;
+
    ----------------
    -- Initialize --
    ----------------

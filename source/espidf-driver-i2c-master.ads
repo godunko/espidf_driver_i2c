@@ -21,6 +21,15 @@ package ESPIDF.Driver.I2C.Master is
 
    type i2c_master_dev_handle_t is private;
 
+   type i2c_master_transmit_multi_buffer_info_t is record
+      buffer : System.Address;
+      length : size_t;
+   end record with Convention => C;
+
+   type i2c_master_transmit_multi_buffer_info_t_Array is
+     array (Natural range <>) of i2c_master_transmit_multi_buffer_info_t
+       with Convention => C;
+
    procedure Initialize
      (Configuration          : out i2c_master_bus_config_t;
       i2c_port               : i2c_port_num_t     := -1;
@@ -68,6 +77,11 @@ package ESPIDF.Driver.I2C.Master is
      (i2c_dev      : i2c_master_dev_handle_t;
       write_buffer : A0B.Types.Arrays.Unsigned_8_Array;
       xfer_timeout : Duration := Duration'Last) return esp_err_t;
+
+   function i2c_master_multi_buffer_transmit
+     (i2c_dev           : i2c_master_dev_handle_t;
+      buffer_info_array : i2c_master_transmit_multi_buffer_info_t_Array;
+      xfer_timeout      : Duration := Duration'Last) return esp_err_t;
 
    function i2c_master_receive
      (i2c_dev      : i2c_master_dev_handle_t;
