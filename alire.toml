@@ -1,5 +1,6 @@
 name = "espidf_driver_i2c"
 version = "0.1.0-dev"
+website = "https://github.com/godunko/espidf_driver_i2c"
 description = "Ada/ESP-IDF I2C master/slave driver"
 long-description = """
 Ada bindings for the ESP-IDF esp_driver_i2c component. This crate provides a native Ada interface for I2C master and slave operations, compatible with ESP-IDF v6.0 and later.
