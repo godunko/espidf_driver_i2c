@@ -1,5 +1,5 @@
 name = "espidf_driver_i2c"
-version = "0.1.0"
+version = "0.2.0-dev"
 website = "https://github.com/godunko/espidf_driver_i2c"
 description = "Ada/ESP-IDF I2C master/slave driver"
 long-description = """
