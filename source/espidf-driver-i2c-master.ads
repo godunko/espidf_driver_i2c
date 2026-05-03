@@ -102,14 +102,16 @@ package ESPIDF.Driver.I2C.Master is
 private
 
    sizeof_i2c_master_bus_config_t : constant int
-      with Import, Link_Name => "__ada_sizeof_i2c_master_bus_config_t";
+      with Import, Convention => C,
+           Link_Name => "__ada_sizeof_i2c_master_bus_config_t";
    sizeof_i2c_device_config_t     : constant int
-      with Import, Link_Name => "__ada_sizeof_i2c_device_config_t";
+      with Import, Convention => C,
+           Link_Name => "__ada_sizeof_i2c_device_config_t";
 
    type i2c_master_bus_config_t_Storage is
      new System.Storage_Elements.Storage_Array
        (1 .. System.Storage_Elements.Storage_Count
-               (sizeof_i2c_master_bus_config_t));
+               (sizeof_i2c_master_bus_config_t)) with Convention => C;
 
    type i2c_master_bus_config_t is record
       Storage : i2c_master_bus_config_t_Storage := [others => 0];
