@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package ESPIDF.Driver.I2C with Preelaborate is
+package ESPIDF.Driver.I2C with Pure is
 
    type i2c_port_num_t is new int;
 
